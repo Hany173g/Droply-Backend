@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "types": ["node", "jest"],
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": false
+  },
+  "include": ["tests/**/*", "src/**/*"]
+}

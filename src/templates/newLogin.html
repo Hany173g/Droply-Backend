@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #f4f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+        .header {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            padding: 40px 30px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .body {
+            padding: 35px 30px 30px;
+            text-align: center;
+        }
+        .body h2 {
+            color: #2d3436;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        .body p {
+            color: #636e72;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #f0fdfa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .info p {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info span {
+            color: #2d3436;
+            font-weight: 600;
+        }
+        .btn {
+            display: inline-block;
+            background: #00b894;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #00a381; }
+        .footer {
+            padding: 20px 30px 30px;
+            text-align: center;
+        }
+        .footer p {
+            color: #b2bec3;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .footer a { color: #00b894; text-decoration: none; }
+        .divider {
+            width: 50px;
+            height: 3px;
+            background: #dfe6e9;
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Droply</h1>
+        </div>
+        <div class="body">
+            <h2>Hello {{name}}</h2>
+            <p>
+                A new sign-in was detected on your <strong>Droply</strong> account. If this was you, no further action is needed.
+            </p>
+            <div class="info">
+                <p><span>&#128187;</span> Device: {{device}}</p>
+                <p><span>&#127758;</span> Location: {{location}}</p>
+                <p><span>&#128337;</span> Time: {{time}}</p>
+            </div>
+            <div class="divider"></div>
+            <p style="font-size:13px; color:#b2bec3;">
+                If you didn't request this, you can safely ignore this email.
+            </p>
+        </div>
+        <div class="footer">
+            <p>
+                &copy; 2026 Droply &bull; All rights reserved.<br>
+                Need help? <a href="mailto:support@droply.com">support@droply.com</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
