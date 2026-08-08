@@ -63,7 +63,7 @@ app.use(globalLimiter)
 
 import healthRouter from "./modules/health/health.route.js"
 
-app.use("/api/health", healthRouter)
+app.use("/api/v1/health", healthRouter)
 
 
 
@@ -71,42 +71,42 @@ app.use("/api/health", healthRouter)
 // Auth Routes
 import authRouter from "./modules/auth/auth.route.js"
 
-app.use("/api/auth",authLimiter,authRouter)
+app.use("/api/v1/auth",authLimiter,authRouter)
 
 // Channel Routes
 import channelRouter from "./modules/channel/channel.route.js"
 
-app.use("/api/channel", channelRouter)
+app.use("/api/v1/channel", channelRouter)
 
 // Video Routes
 import videoRouter from "./modules/videos/video.route.js"
 
-app.use("/api/video", videoRouter)
+app.use("/api/v1/video", videoRouter)
 
 // Like Routes
 import likeRouter from "./modules/like/like.route.js"
 
-app.use("/api/like", likeRouter)
+app.use("/api/v1/like", likeRouter)
 
 // Comment Routes
 import commentRouter from "./modules/comment/comment.route.js"
 
-app.use("/api/comment", commentRouter)
+app.use("/api/v1/comment", commentRouter)
 
 // WatchSession Routes
 import watchSessionRouter from "./modules/WatchSession/watchSession.route.js"
 
-app.use("/api/watch-session", watchSessionRouter)
+app.use("/api/v1/watch-session", watchSessionRouter)
 
 // Home Routes
 import homeRouter from "./modules/home/home.route.js"
 
-app.use("/api/home", homeRouter)
+app.use("/api/v1/home", homeRouter)
 
 // Notification Routes
 import notificationRouter from "./modules/notification/notification.route.js"
 
-app.use("/api/notification", notificationRouter)
+app.use("/api/v1/notification", notificationRouter)
 
 
 

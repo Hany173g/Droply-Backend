@@ -78,7 +78,7 @@ export const login = asyncHandler(async (req : Request , res : Response , next :
             secure: process.env.NODE_ENV === 'production',
             sameSite:'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000,
-            path: '/api/auth/refresh'
+            path: '/api/v1/auth/refresh'
         })
         responseSchema = {
             accessToken:loginData.accessToken,
