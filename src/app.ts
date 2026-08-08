@@ -61,9 +61,9 @@ app.use(globalLimiter)
 
 // Api Health
 
-app.get("/api/health", (req : Request , res : Response , next : NextFunction) => {
-  res.status(200).json({ success: true })
-})
+import healthRouter from "./modules/health/health.route.js"
+
+app.use("/api/health", healthRouter)
 
 
 
