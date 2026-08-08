@@ -89,13 +89,7 @@ export async function checkUserByEmail(email : string , select : boolean = false
     }
     return user
 }
-async function checkUserByEmailAndSelectPassword(email : string) {
-    let user = await User.findOne({email}).select("+password")
-    if (!user) {
-        throw ApiError.notFound("User not found")
-    }
-    return user
-}
+
 
 
 
@@ -353,7 +347,7 @@ export async function twoFactorAuthenticationFlow(token : string ,verificationId
 
 export async function login(email : string, password : string , userAgent : string , ipAddress : string) {
     checkPassword(password)
-    let user = await checkUserByEmailAndSelectPassword(email) 
+    let user = await checkUserByEmail(email , true) 
     checkUserStatus(user)
      let isMatch = await bcrypt.compare(password , user.password)
      if (!isMatch) {
