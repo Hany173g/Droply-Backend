@@ -1,9 +1,13 @@
 import rateLimter from "express-rate-limit"
-import {rateLimterGlobal,rateLimterAuth,upload , subscriptionLimiterConfig, refreshLimiterConfig, watchSessionLimiterConfig, notificationToggleLimiterConfig} from "../constants/rateLimter.js"
-
-
-
-
+import {
+    rateLimterGlobal,
+    rateLimterAuth,
+    upload,
+    subscriptionLimiterConfig,
+    refreshLimiterConfig,
+    watchSessionLimiterConfig,
+    notificationToggleLimiterConfig,
+} from "../constants/rateLimter.js"
 
 const globalLimiter = rateLimter({
     windowMs: rateLimterGlobal.window,
@@ -16,11 +20,10 @@ const globalLimiter = rateLimter({
     },
 })
 
-
 const authLimiter = rateLimter({
-    windowMs:rateLimterAuth.window,
-    max:rateLimterAuth.max,
-    standardHeaders:true,
+    windowMs: rateLimterAuth.window,
+    max: rateLimterAuth.max,
+    standardHeaders: true,
     legacyHeaders: false,
     message: {
         success: false,
@@ -28,20 +31,15 @@ const authLimiter = rateLimter({
     },
 })
 
-
-
 const uploadLimiter = rateLimter({
-    windowMs:upload.window, 
-    standardHeaders:true,
+    windowMs: upload.window,
+    standardHeaders: true,
     legacyHeaders: false,
     message: {
         success: false,
         message: "Too many requests, please try again later.",
     },
-});
-
-
-
+})
 
 const subscriptionLimiter = rateLimter({
     windowMs: subscriptionLimiterConfig.window,
@@ -87,4 +85,12 @@ const notificationToggleLimiter = rateLimter({
     },
 })
 
-export { globalLimiter, authLimiter , uploadLimiter , subscriptionLimiter, refreshLimiter, watchSessionLimiter, notificationToggleLimiter }
+export {
+    globalLimiter,
+    authLimiter,
+    uploadLimiter,
+    subscriptionLimiter,
+    refreshLimiter,
+    watchSessionLimiter,
+    notificationToggleLimiter,
+}

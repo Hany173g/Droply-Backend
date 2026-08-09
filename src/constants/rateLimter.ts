@@ -1,15 +1,7 @@
-
-
-
-
-
-
 export const rateLimterGlobal = {
-    window: 1 * 60 * 1000 ,
-    max: 50
+    window: 1 * 60 * 1000,
+    max: 50,
 }
-
-
 
 export const rateLimterAuth = {
     window: 15 * 60 * 1000,
@@ -17,8 +9,8 @@ export const rateLimterAuth = {
 }
 
 export const upload = {
-        window: 15 * 60 * 1000,
-        max : 20,  
+    window: 15 * 60 * 1000,
+    max: 20,
 }
 
 export const subscriptionLimiterConfig = {

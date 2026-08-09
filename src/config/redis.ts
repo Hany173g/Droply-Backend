@@ -4,9 +4,8 @@ import { env } from "./env.js"
 export const redis = new IORedis({
     host: env.redis.REDIS_HOST,
     port: env.redis.REDIS_PORT,
-    maxRetriesPerRequest: null
+    maxRetriesPerRequest: null,
 })
-
 
 export const redisCache = new IORedis({
     host: env.redis.REDIS_HOST,
@@ -15,7 +14,7 @@ export const redisCache = new IORedis({
     retryStrategy: (times) => {
         if (times > 3) return null
         return Math.min(times * 200, 2000)
-    }
+    },
 })
 
 redis.on("error", (err) => {

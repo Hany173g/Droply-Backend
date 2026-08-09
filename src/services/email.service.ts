@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from "nodemailer"
 
 class EmailService {
     private user: string
@@ -12,29 +12,29 @@ class EmailService {
             host: "smtp.gmail.com",
             port: 587,
             secure: false,
-            auth: { 
-                user: this.user, 
-                pass: this.pass 
+            auth: {
+                user: this.user,
+                pass: this.pass,
             },
             tls: {
-                rejectUnauthorized: false
-            }
+                rejectUnauthorized: false,
+            },
         })
     }
-    
+
     async sendEmail(to: string, subject: string, html: string) {
         try {
             let info = await this.transporter.sendMail({
                 from: `"Droply" <${this.user}>`,
                 to,
                 subject,
-                html
+                html,
             })
         } catch (error) {
-            console.error("Email sending error:", error);
-            throw error;
+            console.error("Email sending error:", error)
+            throw error
         }
     }
 }
 
-export default EmailService;
+export default EmailService

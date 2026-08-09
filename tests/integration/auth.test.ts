@@ -6,7 +6,7 @@ import User from "../../src/modules/user/models/user.model"
 import VerifyToken from "../../src/modules/auth/models/tokenVerify"
 
 jest.unstable_mockModule("../../src/utils/sentEmail", () => ({
-    default: jest.fn()
+    default: jest.fn(),
 }))
 
 jest.unstable_mockModule("../../src/constants/rateLimter", () => ({
@@ -25,7 +25,7 @@ const sentEmail = (await import("../../src/utils/sentEmail")).default as jest.Mo
 const validUser = {
     name: "Ahmed Ali",
     password: "Test1234!@",
-    email: "ahmedali@gmail.com"
+    email: "ahmedali@gmail.com",
 }
 
 let mongoServer: MongoMemoryServer
@@ -51,9 +51,7 @@ beforeEach(async () => {
 
 describe("POST /api/auth/register", () => {
     it("should register user and return 201", async () => {
-        const res = await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
+        const res = await request(app).post("/api/v1/auth/register").send(validUser)
 
         expect(res.status).toBe(201)
         expect(res.body.success).toBe(true)
@@ -67,7 +65,11 @@ describe("POST /api/auth/register", () => {
         const token = await VerifyToken.findOne({ type: "confirm-account", userId: user!._id })
         expect(token).not.toBeNull()
 
-        expect(sentEmail).toHaveBeenCalledWith(validUser.email, "Confirm Your Account", expect.any(String))
+        expect(sentEmail).toHaveBeenCalledWith(
+            validUser.email,
+            "Confirm Your Account",
+            expect.any(String),
+        )
     })
 
     it("should return 400 if name is missing", async () => {
@@ -89,13 +91,9 @@ describe("POST /api/auth/register", () => {
     })
 
     it("should return 409 if email already exists", async () => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
+        await request(app).post("/api/v1/auth/register").send(validUser)
 
-        const res = await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
+        const res = await request(app).post("/api/v1/auth/register").send(validUser)
 
         expect(res.status).toBe(409)
         expect(res.body.message).toBe("Email already exists")
@@ -119,32 +117,22 @@ describe("POST /api/auth/register", () => {
         expect(res.status).toBe(422)
         expect(res.body.message).toBe("Password Must contain Symbol")
     })
-
- 
 })
 
-
-
-describe("Post /api/auth/verify-account/:verifyToken" , () => {
-   it("should return 410 expired token", async () => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
-        const tokenDoc = await VerifyToken.findOne({ type: "confirm-account"})  
+describe("Post /api/auth/verify-account/:verifyToken", () => {
+    it("should return 410 expired token", async () => {
+        await request(app).post("/api/v1/auth/register").send(validUser)
+        const tokenDoc = await VerifyToken.findOne({ type: "confirm-account" })
         tokenDoc!.expiredAt = new Date(Date.now() - 60000)
         await tokenDoc!.save()
-        const res = await request(app)
-            .post(`/api/v1/auth/verify-account/${tokenDoc!.token}`)
+        const res = await request(app).post(`/api/v1/auth/verify-account/${tokenDoc!.token}`)
         expect(res.status).toBe(410)
-        expect(res.body.message).toBe("Verification Token is expired") 
+        expect(res.body.message).toBe("Verification Token is expired")
     })
     it("should return 200 verify account", async () => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
+        await request(app).post("/api/v1/auth/register").send(validUser)
         let tokenDoc = await VerifyToken.findOne({ type: "confirm-account" })
-        const res = await request(app)
-            .post(`/api/v1/auth/verify-account/${tokenDoc!.token}`)
+        const res = await request(app).post(`/api/v1/auth/verify-account/${tokenDoc!.token}`)
         let user = await User.findById(tokenDoc!.userId)
         tokenDoc = await VerifyToken.findOne({ type: "confirm-account" })
         expect(tokenDoc).toBe(null)
@@ -152,37 +140,29 @@ describe("Post /api/auth/verify-account/:verifyToken" , () => {
         expect(user!.status).toBe("approved")
         expect(res.body.success).toBe(true)
     })
-    it("should return 404 if not found token" , async() => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
-        const res = await request(app)
-            .post(`/api/v1/auth/verify-account/randomToken`)
+    it("should return 404 if not found token", async () => {
+        await request(app).post("/api/v1/auth/register").send(validUser)
+        const res = await request(app).post(`/api/v1/auth/verify-account/randomToken`)
         expect(res.status).toBe(404)
         expect(res.body.message).toBe("Verification Token not found or expired")
     })
 })
 
-
-describe("Post /api/auth/forget-password" , () => {
-    it("should return 400 if email not found" , async () => {
-        let res = await request(app)
-        .post("/api/v1/auth/forget-password")
-        .send({})
+describe("Post /api/auth/forget-password", () => {
+    it("should return 400 if email not found", async () => {
+        let res = await request(app).post("/api/v1/auth/forget-password").send({})
         expect(res.status).toBe(400)
-        expect(res.body.message).toBe("\"email\" is required")
+        expect(res.body.message).toBe('"email" is required')
     })
-    it("should return 400 if email is not a valid email" , async () => {
+    it("should return 400 if email is not a valid email", async () => {
         let res = await request(app)
-        .post("/api/v1/auth/forget-password")
-        .send({ email: "notanemail" })
+            .post("/api/v1/auth/forget-password")
+            .send({ email: "notanemail" })
         expect(res.status).toBe(400)
         expect(res.body.message).toBe("This is not a valid email")
     })
-    it("should return 200 and create forget password token" , async () => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
+    it("should return 200 and create forget password token", async () => {
+        await request(app).post("/api/v1/auth/register").send(validUser)
         const res = await request(app)
             .post("/api/v1/auth/forget-password")
             .send({ email: validUser.email })
@@ -195,25 +175,21 @@ describe("Post /api/auth/forget-password" , () => {
     })
 })
 
-describe("Post /api/auth/verifyForgetPasswordToken/:verifyToken" , () => {
+describe("Post /api/auth/verifyForgetPasswordToken/:verifyToken", () => {
     it("should return 410 expired token", async () => {
-        await request(app)
-            .post("/api/v1/auth/register")
-            .send(validUser)
-        await request(app)
-            .post("/api/v1/auth/forget-password")
-            .send({ email: validUser.email })
+        await request(app).post("/api/v1/auth/register").send(validUser)
+        await request(app).post("/api/v1/auth/forget-password").send({ email: validUser.email })
         const tokenDoc = await VerifyToken.findOne({ type: "forget-password" })
         tokenDoc!.expiredAt = new Date(Date.now() - 60000)
         await tokenDoc!.save()
-        const res = await request(app)
-            .post(`/api/v1/auth/verifyForgetPasswordToken/${tokenDoc!.token}`)
+        const res = await request(app).post(
+            `/api/v1/auth/verifyForgetPasswordToken/${tokenDoc!.token}`,
+        )
         expect(res.status).toBe(410)
         expect(res.body.message).toBe("Verification Token is expired")
     })
     it("should return 404 if not found token", async () => {
-        const res = await request(app)
-            .post("/api/v1/auth/verifyForgetPasswordToken/randomToken")
+        const res = await request(app).post("/api/v1/auth/verifyForgetPasswordToken/randomToken")
         expect(res.status).toBe(404)
         expect(res.body.message).toBe("Verification Token not found or expired")
     })

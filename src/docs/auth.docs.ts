@@ -226,7 +226,7 @@
  *                   example: false
  *                 message:
  *                   type: string
- * 
+ *
  * /auth/login:
  *  post:
  *      summary: Login route
@@ -243,7 +243,7 @@
  *                          - password
  *                      properties:
  *                          email:
- *                              type: string    
+ *                              type: string  
  *                              format: email
  *                              example: droply@gmail.com
  *                              description: "Only support gmail format"
@@ -315,6 +315,5 @@
  *                            type: boolean
  *                            example: false
  *                          message:
- *                            type: string               
+ *                            type: string  
  */
- 

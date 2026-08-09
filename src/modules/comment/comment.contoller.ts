@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from "express";
-import asyncHandler from "../../middlewares/asyncHandler.js";
-import { createComment, deleteComment, getComments } from "./comment.service.js";
+import type { Request, Response, NextFunction } from "express"
+import asyncHandler from "../../middlewares/asyncHandler.js"
+import { createComment, deleteComment, getComments } from "./comment.service.js"
 
 export const create = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let user = (req as any).user

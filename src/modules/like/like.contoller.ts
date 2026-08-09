@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from "express";
-import asyncHandler from "../../middlewares/asyncHandler.js";
-import { toggleLike, hasUserLiked } from "./like.service.js";
+import type { Request, Response, NextFunction } from "express"
+import asyncHandler from "../../middlewares/asyncHandler.js"
+import { toggleLike, hasUserLiked } from "./like.service.js"
 
 export const toggle = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     let user = (req as any).user
