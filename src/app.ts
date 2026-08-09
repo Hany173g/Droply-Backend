@@ -65,6 +65,16 @@ import healthRouter from "./modules/health/health.route.js"
 
 app.use("/api/v1/health", healthRouter)
 
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./config/swagger.js";
+
+if (env.app.NODE_ENV !== "Production") {
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+  )
+}
 
 
 
