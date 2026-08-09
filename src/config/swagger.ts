@@ -8,6 +8,15 @@ const swaggerOptions: swaggerJSDoc.Options = {
             version: "1.0.0",
             description: "REST API for Droply",
         },
+        components: {
+        securitySchemes: {
+            bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+            },
+        },
+        },
         servers: [
             {
                 url: `http://localhost:${env.app.PORT}/api/v1`,
