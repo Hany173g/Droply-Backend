@@ -8,7 +8,9 @@
     "test:unit": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit",
     "test:integration": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/integration --forceExit",
     "dev": "tsx --watch src/server.ts",
-    "test:watch": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch"
+    "build": "tsc",
+    "test:watch": "cross-env NODE_OPTIONS=\"--experimental-vm-modules\" jest --watch",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
