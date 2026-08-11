@@ -15,7 +15,6 @@ const validate = (schema: any, source: "body" | "query" | "params" = "body") => 
 
             const { error } = schema.validate(data)
             if (error) {
-                console.log("Validation error:", error.details)
                 return res.status(400).json({
                     success: false,
                     message: error.details[0].message,

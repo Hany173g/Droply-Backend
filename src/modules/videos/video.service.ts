@@ -103,7 +103,6 @@ export async function waitForEagerCompletion(
     backOffDelay: number,
     job: Job,
 ): Promise<string | null> {
-    console.log("iam work")
     const resource = await cloudinary.api.resource(publicId, { resource_type: "video" })
     const eagerResult = resource.eager?.[0]
     if (eagerResult?.status === "complete") {
@@ -227,7 +226,6 @@ export async function uploadVideoAndTumbail(
         }
         throw err
     }
-    console.log("before created")
     let video
     try {
         video = await createVideo(userId, hashVideo, result)
@@ -241,7 +239,6 @@ export async function uploadVideoAndTumbail(
         throw err
     }
     let backOffDelay = getBackoffDelay(video.duration)
-    console.log("after created", video)
 
     let thumbnailData = null
     if (tumbnailPath) {

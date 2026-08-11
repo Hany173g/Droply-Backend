@@ -9,7 +9,6 @@ let retries = 0
 export const connectDB = async () => {
     try {
         const conn = await mongoose.connect(env.db.MONGODB_URL)
-        console.log(` MongoDB connected: ${conn.connection.host}`)
         // retries = 0; // reset on success
     } catch (error) {
         retries++
@@ -22,7 +21,6 @@ export const connectDB = async () => {
             process.exit(1)
         }
 
-        console.log(` Retrying in ${RETRY_INTERVAL_MS / 1000}s...`)
         setTimeout(connectDB, RETRY_INTERVAL_MS) // recursion
     }
 }
@@ -34,13 +32,10 @@ mongoose.connection.on("disconnected", () => {
 })
 
 // Connection restored
-mongoose.connection.on("reconnected", () => {
-    console.log(" MongoDB reconnected.")
-})
+mongoose.connection.on("reconnected", () => {})
 
 // Clean up on app termination
 process.on("SIGINT", async () => {
     await mongoose.connection.close()
-    console.log("🔌 MongoDB connection closed.")
     process.exit(0)
 })

@@ -7,9 +7,7 @@ async function startServer() {
     try {
         await connectDB()
         await redis.ping()
-        app.listen(env.app.PORT, () => {
-            console.log("Server is running")
-        })
+        app.listen(env.app.PORT, () => {})
     } catch (err) {
         console.error("Failed to start:", err)
         process.exit(1)
