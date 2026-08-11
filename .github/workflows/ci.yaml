@@ -1,9 +1,10 @@
-name: Droply Ci
+name: Droply CI
 
 on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
@@ -11,6 +12,36 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:8
+        ports:
+          - 27017:27017
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    env:
+      CLIENT_URL: ${{ vars.CLIENT_URL }}
+      MONGODB_URL: mongodb://localhost:27017/Droply
+      PORT: ${{ vars.PORT }}
+      NODE_ENV: ${{ vars.NODE_ENV }}
+
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+
+      CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+      CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+      CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
 
     steps:
       - uses: actions/checkout@v4
@@ -20,5 +51,5 @@ jobs:
       - run: npm test
 
       - run: npm run build
+
       - run: docker build -t droply .
-      
