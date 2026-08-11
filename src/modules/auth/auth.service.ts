@@ -8,6 +8,7 @@ import sentEmail from "../../utils/sentEmail.js"
 import fs, { access } from "fs"
 import path from "path"
 import { env } from "../../config/env.js"
+import crypto from "crypto"
 import { fileURLToPath } from "url"
 import type { IVerifyToken } from "./auth.types.js"
 import { accessTokenConfig, refreshTokenConfig } from "../../config/jwt.js"
@@ -86,11 +87,8 @@ export async function checkUserByEmail(email: string, select: boolean = false) {
     return user
 }
 
-// Read in loading file
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const verifyPath = path.join(__dirname, "../../templates/confirmAccount.html")
-const htmlTemplate = fs.readFileSync(verifyPath, "utf8")
 
 export async function Register(
     name: string,
@@ -122,6 +120,8 @@ export async function Register(
     })
     if (!token) throw ApiError.internal("Failed to create verifyToken")
     // Replace placeholder in html template
+    const verifyPath = path.join(__dirname, "../../templates/confirmAccount.html")
+    const htmlTemplate = fs.readFileSync(verifyPath, "utf8")
     let html = htmlTemplate
         .replace("{{expiresIn}}", auth.token.expired.toString())
         .replace("{{confirmationLink}}", `${env.client.url}/verify-account/${verifyToken}`)
@@ -159,15 +159,6 @@ export async function verifyAccount(verifyToken: string) {
     await VerifyToken.deleteOne({ _id: checkToken._id })
 }
 
-const forgetPath = path.join(__dirname, "../../templates/forgetPassword.html")
-const forgetTemplate = fs.readFileSync(forgetPath, "utf8")
-
-const loginPath = path.join(__dirname, "../../templates/newLogin.html")
-const loginTemplate = fs.readFileSync(loginPath, "utf8")
-
-const twoFactorPath = path.join(__dirname, "../../templates/twoFactor.html")
-const twoFactorTemplate = fs.readFileSync(twoFactorPath, "utf8")
-
 export async function forgetPassword(email: string) {
     let user = await checkUserByEmail(email)
     let verifyToken = generateToken()
@@ -179,6 +170,8 @@ export async function forgetPassword(email: string) {
         expiredAt: verificationExpiresAt,
         token: verifyToken,
     })
+    const forgetPath = path.join(__dirname, "../../templates/forgetPassword.html")
+    const forgetTemplate = fs.readFileSync(forgetPath, "utf8")
     let html = forgetTemplate
         .replace("{{expiresIn}}", auth.token.expired.toString())
         .replace("{{resetLink}}", `${env.client.url}/forget-password/${verifyToken}`)
@@ -228,6 +221,8 @@ export async function sendLoginAlert(
         hour: "2-digit",
         minute: "2-digit",
     })
+    const loginPath = path.join(__dirname, "../../templates/newLogin.html")
+    const loginTemplate = fs.readFileSync(loginPath, "utf8")
     let html = loginTemplate
         .replace("{{name}}", name)
         .replace("{{device}}", device)
@@ -267,6 +262,8 @@ export async function sendTwoFactorAuthentication(user: { _id: Types.ObjectId; e
         verificationId,
     })
     if (!newVerifyToken) throw ApiError.internal("Failed to create verify token, please try again")
+    const twoFactorPath = path.join(__dirname, "../../templates/twoFactor.html")
+    const twoFactorTemplate = fs.readFileSync(twoFactorPath, "utf8")
     let html = twoFactorTemplate
         .replace("{{code}}", token)
         .replace("{{expiresIn}}", auth.token.expired.toString())
@@ -325,7 +322,9 @@ export async function twoFactorAuthenticationFlow(
         throw ApiError.unAuthorized("Code is expired, please login again")
     }
 
-    if (checkToken.token !== token) {
+    const a = Buffer.from(checkToken.token)
+    const b = Buffer.from(token)
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
         const updated = await VerifyToken.findOneAndUpdate(
             { _id: checkToken._id },
             { $inc: { attempts: 1 } },
