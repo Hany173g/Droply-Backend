@@ -97,7 +97,7 @@ export const login = asyncHandler(async (req: Request, res: Response, next: Next
 export const refresh = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken
     let accessToken = await refreshSevice(refreshToken)
-    res.status(200).json({ success: refreshToken, accessToken })
+    res.status(200).json({ success: true, accessToken })
 })
 
 export const twoFactorAuthenticationVerification = asyncHandler(
