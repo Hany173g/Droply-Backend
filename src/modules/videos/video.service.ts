@@ -24,7 +24,7 @@ import { broadcastNotificationQueue } from "../notification/notification.queue.j
 import { ApiFeatures } from "../../utils/ApiFeatures.js"
 import { franc } from "franc"
 import { findLanguageByISO639_3, DEFAULT_LANGUAGE } from "../../constants/languages.js"
-import { getVideosTrack } from "../WatchSession/watchSession.service.js"
+import { getVideosTrack } from "../watchSession/watchSession.service.js"
 async function getVideoDuration(filePath: string): Promise<number> {
     const mediainfo = await mediaInfoFactory({ format: "JSON" })
     const buffer = await fsPromises.readFile(filePath)
@@ -55,7 +55,7 @@ function getFileHash(filePath: string): Promise<string> {
     })
 }
 
-async function valadtionVideo(filePath: string): Promise<"video" | "reels"> {
+async function validateVideo(filePath: string): Promise<"video" | "reels"> {
     let duration = await getVideoDuration(filePath)
     if (duration < 3) {
         throw ApiError.badRequest("Video time must be bigger than 3 second")
@@ -188,12 +188,12 @@ async function createVideo(userId: string, hash: string, result: VideoUploadResu
     return video
 }
 
-export async function uploadVideoAndTumbail(
+export async function uploadVideoAndThumbnail(
     userId: string,
     filePath: string,
     hashVideo: string,
     userVideoId: string,
-    tumbnailPath: string,
+    thumbnailPath: string,
     job: Job,
 ) {
     let result: VideoUploadResult | null = null
@@ -241,9 +241,9 @@ export async function uploadVideoAndTumbail(
     let backOffDelay = getBackoffDelay(video.duration)
 
     let thumbnailData = null
-    if (tumbnailPath) {
+    if (thumbnailPath) {
         try {
-            const thumbBuffer = await fsPromises.readFile(tumbnailPath)
+            const thumbBuffer = await fsPromises.readFile(thumbnailPath)
             thumbnailData = await uploadImageToCloudinary(thumbBuffer, {
                 folder: "thumbnails",
                 width: 1280,
@@ -253,7 +253,7 @@ export async function uploadVideoAndTumbail(
         } catch (err) {
             console.error("Thumbnail upload failed:", err)
         }
-        await fsPromises.unlink(tumbnailPath).catch(() => {})
+        await fsPromises.unlink(thumbnailPath).catch(() => {})
     }
 
     await UserVideo.findByIdAndUpdate(userVideo._id, {
@@ -337,7 +337,7 @@ export async function createVideoFlow(
     file: Express.Multer.File,
     thumbnail: Express.Multer.File,
 ) {
-    let type = await valadtionVideo(file.path)
+    let type = await validateVideo(file.path)
     let duplicateCheck = await checkDuplicateVideo(file.path, userId, data, type, thumbnail?.path)
     if (duplicateCheck.success) {
         await fsPromises.unlink(file.path)

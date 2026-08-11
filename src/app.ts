@@ -5,7 +5,7 @@ import { ApiError } from "./utils/ApiError.js"
 import hpp from "hpp"
 import compression from "compression"
 import cookieParser from "cookie-parser"
-import { globalLimiter, authLimiter } from "./middlewares/rateLimter.js"
+import { globalLimiter, authLimiter } from "./middlewares/rateLimiter.js"
 import { globalErrorHandling } from "./middlewares/errorHandling.js"
 import { env } from "./config/env.js"
 let app = express()
@@ -85,7 +85,7 @@ import commentRouter from "./modules/comment/comment.route.js"
 app.use("/api/v1/comment", commentRouter)
 
 // WatchSession Routes
-import watchSessionRouter from "./modules/WatchSession/watchSession.route.js"
+import watchSessionRouter from "./modules/watchSession/watchSession.route.js"
 
 app.use("/api/v1/watch-session", watchSessionRouter)
 

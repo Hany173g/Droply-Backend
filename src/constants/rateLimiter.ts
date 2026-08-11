@@ -1,9 +1,9 @@
-export const rateLimterGlobal = {
+export const rateLimiterGlobal = {
     window: 1 * 60 * 1000,
     max: 50,
 }
 
-export const rateLimterAuth = {
+export const rateLimiterAuth = {
     window: 15 * 60 * 1000,
     max: 10,
 }

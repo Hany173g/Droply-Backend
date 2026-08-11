@@ -8,7 +8,7 @@ import {
     twoFactorAuthenticationVerification,
     verifyForgetPasswordToken,
     updatePassword,
-} from "./auth.contoller.js"
+} from "./auth.controller.js"
 import validate from "../../middlewares/validate.js"
 import {
     registerSchema,
@@ -17,7 +17,7 @@ import {
     twoFactorAuthenticationVerificationSchema,
     forgetPasswordSchema,
     passwordValadtion,
-} from "./auth.valadtion.js"
+} from "./auth.validation.js"
 const router = express.Router()
 
 router.post("/register", validate(registerSchema), register)

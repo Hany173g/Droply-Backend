@@ -1,6 +1,6 @@
 import { Worker, Queue } from "bullmq"
 import { redis } from "../../config/redis.js"
-import { uploadVideoAndTumbail, waitForEagerCompletion } from "./video.service.js"
+import { uploadVideoAndThumbnail, waitForEagerCompletion } from "./video.service.js"
 
 export const videoQueue = new Queue("videoQueue", {
     connection: redis,
@@ -12,12 +12,12 @@ export const streamingQueue = new Queue("streamingQueue", {
 const videoWorker = new Worker(
     "videoQueue",
     async (job) => {
-        await uploadVideoAndTumbail(
+        await uploadVideoAndThumbnail(
             job.data.userId,
             job.data.filePath,
             job.data.hashVideo,
             job.data.userVideoId,
-            job.data.tumbnailPath,
+            job.data.thumbnailPath,
             job,
         )
     },

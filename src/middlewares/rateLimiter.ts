@@ -1,17 +1,17 @@
 import rateLimter from "express-rate-limit"
 import {
-    rateLimterGlobal,
-    rateLimterAuth,
+    rateLimiterGlobal,
+    rateLimiterAuth,
     upload,
     subscriptionLimiterConfig,
     refreshLimiterConfig,
     watchSessionLimiterConfig,
     notificationToggleLimiterConfig,
-} from "../constants/rateLimter.js"
+} from "../constants/rateLimiter.js"
 
 const globalLimiter = rateLimter({
-    windowMs: rateLimterGlobal.window,
-    max: rateLimterGlobal.max,
+    windowMs: rateLimiterGlobal.window,
+    max: rateLimiterGlobal.max,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
@@ -21,8 +21,8 @@ const globalLimiter = rateLimter({
 })
 
 const authLimiter = rateLimter({
-    windowMs: rateLimterAuth.window,
-    max: rateLimterAuth.max,
+    windowMs: rateLimiterAuth.window,
+    max: rateLimiterAuth.max,
     standardHeaders: true,
     legacyHeaders: false,
     message: {

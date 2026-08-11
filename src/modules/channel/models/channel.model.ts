@@ -19,7 +19,7 @@ const channelSchema = new mongoose.Schema(
                 },
             },
         ],
-        emailContant: {
+        emailContact: {
             type: String,
         },
         location: {

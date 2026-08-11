@@ -36,7 +36,7 @@ export const updateChannelSchema = Joi.object({
         links: Joi.array().items(linkSchema).messages({
             "array.base": "Links must be an array",
         }),
-        emailContant: Joi.string().email().allow("").optional().messages({
+        emailContact: Joi.string().email().allow("").optional().messages({
             "string.email": "This is not a valid email",
         }),
         description: Joi.string().allow("").optional(),

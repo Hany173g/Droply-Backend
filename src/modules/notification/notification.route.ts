@@ -4,7 +4,7 @@ import {
     markAsRead,
     markAllAsRead,
     deleteNotification,
-} from "./notification.contoller.js"
+} from "./notification.controller.js"
 import { protect } from "../../middlewares/auth.js"
 
 const router = express.Router()

@@ -1,5 +1,5 @@
 import express from "express"
-import { homeFeed, shorts } from "./home.contoller.js"
+import { homeFeed, shorts } from "./home.controller.js"
 
 const router = express.Router()
 

@@ -1,20 +1,20 @@
 import mongoose, { trusted } from "mongoose"
-import { userValadtion, user } from "../../../constants/user.js"
+import { userValidation, user } from "../../../constants/user.js"
 import type { IUser } from "../user.types.js"
 
 const userSchema = new mongoose.Schema(
     {
         username: {
             type: String,
-            minlength: userValadtion.username.min,
-            maxlength: userValadtion.username.max,
+            minlength: userValidation.username.min,
+            maxlength: userValidation.username.max,
             unique: true,
             required: true,
         },
         name: {
             type: String,
-            minlength: userValadtion.name.min,
-            maxlength: userValadtion.name.max,
+            minlength: userValidation.name.min,
+            maxlength: userValidation.name.max,
             required: true,
         },
         password: {

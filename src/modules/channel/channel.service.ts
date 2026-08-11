@@ -51,8 +51,8 @@ export async function updateChannelInfo(data: IChannel, userId: string): Promise
     if (data.links && data.links.length > 0) {
         channel = await handleLinks(data.links, channel)
     }
-    if (data.emailContant) {
-        channel.emailContant = data.emailContant
+    if (data.emailContact) {
+        channel.emailContact = data.emailContact
     }
     if (data.description) {
         channel.description = data.description

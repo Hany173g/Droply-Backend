@@ -1,8 +1,8 @@
 import express from "express"
-import { toggle, check } from "./like.contoller.js"
+import { toggle, check } from "./like.controller.js"
 import { protect } from "../../middlewares/auth.js"
 import validate from "../../middlewares/validate.js"
-import { targetSchema } from "./like.valadtion.js"
+import { targetSchema } from "./like.validation.js"
 const router = express.Router()
 
 router.post("/toggle", protect, validate(targetSchema), toggle)

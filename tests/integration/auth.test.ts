@@ -9,9 +9,9 @@ jest.unstable_mockModule("../../src/utils/sentEmail", () => ({
     default: jest.fn(),
 }))
 
-jest.unstable_mockModule("../../src/constants/rateLimter", () => ({
-    rateLimterGlobal: { window: 60 * 60 * 1000, max: 1000 },
-    rateLimterAuth: { window: 60 * 60 * 1000, max: 1000 },
+jest.unstable_mockModule("../../src/constants/rateLimiter", () => ({
+    rateLimiterGlobal: { window: 60 * 60 * 1000, max: 1000 },
+    rateLimiterAuth: { window: 60 * 60 * 1000, max: 1000 },
     upload: { window: 60 * 60 * 1000, max: 1000 },
     subscriptionLimiterConfig: { window: 60 * 60 * 1000, max: 1000 },
     refreshLimiterConfig: { window: 60 * 60 * 1000, max: 1000 },

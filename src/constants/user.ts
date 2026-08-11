@@ -1,4 +1,4 @@
-export const userValadtion = {
+export const userValidation = {
     username: {
         min: 1,
         max: 20,

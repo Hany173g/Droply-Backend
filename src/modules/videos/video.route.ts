@@ -7,11 +7,11 @@ import {
     updateStatus,
     refreshUrl,
     search,
-} from "./videos.contoller.js"
+} from "./videos.controller.js"
 import { protect } from "../../middlewares/auth.js"
-import { refreshLimiter } from "../../middlewares/rateLimter.js"
+import { refreshLimiter } from "../../middlewares/rateLimiter.js"
 import validate from "../../middlewares/validate.js"
-import { createVideoSchema, updateVideoSchema } from "./video.valadtion.js"
+import { createVideoSchema, updateVideoSchema } from "./video.validation.js"
 import { videoUpload, videoWithThumbnailUpload } from "../../config/multer.js"
 const router = express.Router()
 

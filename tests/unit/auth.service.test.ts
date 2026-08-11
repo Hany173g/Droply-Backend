@@ -50,17 +50,17 @@ describe("Auth Service", () => {
 
     describe("Email Valadtion", () => {
         it("should throw if input not email", async () => {
-            await expect(authService.emailValadtion("droply")).rejects.toThrow()
+            await expect(authService.emailValidation("droply")).rejects.toThrow()
         })
         it("should throw if email not gmail", async () => {
-            await expect(authService.emailValadtion("droply@yahoo.com")).rejects.toThrow()
+            await expect(authService.emailValidation("droply@yahoo.com")).rejects.toThrow()
         })
         it("should throw if email is duplicate", async () => {
             jest.spyOn(User, "findOne").mockResolvedValue({
                 id: 1,
                 user: "Droply",
             } as unknown as UserDocument)
-            await expect(authService.emailValadtion("droply@gmail.com")).rejects.toThrow()
+            await expect(authService.emailValidation("droply@gmail.com")).rejects.toThrow()
         })
     })
 
@@ -145,7 +145,7 @@ describe("Auth Service", () => {
             mockVerifiedUser(validToken)
             jest.spyOn(Channel, "create").mockResolvedValue(null as never)
             await expect(authService.verifyAccount("validToken")).rejects.toThrow(
-                "Faild to verify account, please try again",
+                "Failed to verify account, please try again",
             )
         })
         it("should delete token if is successfully", async () => {
@@ -225,7 +225,7 @@ describe("Auth Service", () => {
             jest.spyOn(VerifyToken, "deleteMany").mockResolvedValue(3 as never)
             jest.spyOn(VerifyToken, "create").mockResolvedValue(null as never)
             await expect(
-                authService.sendtwoFactorAuthentication({
+                authService.sendTwoFactorAuthentication({
                     _id: 343,
                     email: "droply@gmail.com",
                 } as never),
@@ -237,7 +237,7 @@ describe("Auth Service", () => {
             jest.spyOn(VerifyToken, "create").mockResolvedValue(validToken as never)
             const sentEmailMock = (await import("../../src/utils/sentEmail")).default as jest.Mock
             sentEmailMock.mockClear()
-            await authService.sendtwoFactorAuthentication({
+            await authService.sendTwoFactorAuthentication({
                 _id: 343,
                 email: "droply@gmail.com",
             } as never)

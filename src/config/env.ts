@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-const envValadtion = joi
+const envValidation = joi
     .object({
         // Client
         CLIENT_URL: joi.string().required(),
@@ -33,7 +33,7 @@ const envValadtion = joi
     })
     .unknown(true)
 
-let { error, value } = envValadtion.validate(process.env)
+let { error, value } = envValidation.validate(process.env)
 
 if (error) {
     console.error("Invalid environment variables:", error.message)

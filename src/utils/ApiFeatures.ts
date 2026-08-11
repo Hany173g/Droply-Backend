@@ -41,8 +41,8 @@ export class ApiFeatures<T> {
     }
     select() {
         if (this.queryString.select && typeof this.queryString.select === "string") {
-            const selectFeilds = this.queryString.select.split(",").join(" ")
-            this.query = this.query.select(selectFeilds)
+            const selectFields = this.queryString.select.split(",").join(" ")
+            this.query = this.query.select(selectFields)
         }
         return this
     }

@@ -20,7 +20,7 @@ export class ApiError extends Error {
     static notFound(message: string = "Not Found") {
         return new ApiError(message, 404)
     }
-    static methodNotAllow(message: string = "Method Not Allow") {
+    static methodNotAllow(message: string = "Method Not Allowed") {
         return new ApiError(message, 405)
     }
     static conflict(message: string = "Conflict") {
@@ -29,13 +29,13 @@ export class ApiError extends Error {
     static unprocessableEntity(message: string = "Unprocessable Entity") {
         return new ApiError(message, 422)
     }
-    static rateLimter(message: string = "Too Many Requests") {
+    static rateLimiter(message: string = "Too Many Requests") {
         return new ApiError(message, 429)
     }
-    static interal(message: string = "500 Internal Server Error") {
+    static internal(message: string = "Internal Server Error") {
         return new ApiError(message, 500)
     }
-    static overLoad(message: string = "Serivce Unavailable") {
+    static overLoad(message: string = "Service Unavailable") {
         return new ApiError(message, 503)
     }
 }

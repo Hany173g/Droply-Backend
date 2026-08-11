@@ -33,7 +33,7 @@ export function checkPassword(password: string) {
     }
 }
 
-export async function emailValadtion(email: string) {
+export async function emailValidation(email: string) {
     let regaxEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]+$/
     let isEmail = regaxEmail.test(email)
     if (!isEmail) {
@@ -52,7 +52,7 @@ export async function emailValadtion(email: string) {
 
 async function hashPassword(password: string) {
     const hash = await bcrypt.hash(password, 10)
-    if (!hash) throw ApiError.interal("Faild to hash password")
+    if (!hash) throw ApiError.internal("Failed to hash password")
     return hash
 }
 
@@ -99,7 +99,7 @@ export async function Register(
     acceptLanguage?: string,
 ) {
     checkPassword(password)
-    await emailValadtion(email)
+    await emailValidation(email)
     let username = await generateUsername(name)
     password = await hashPassword(password)
     let language = resolveLanguage(acceptLanguage)
@@ -112,7 +112,7 @@ export async function Register(
         verificationExpiresAt,
         language,
     })
-    if (!user) throw ApiError.interal("faild to create user")
+    if (!user) throw ApiError.internal("Failed to create user")
     let verifyToken = generateToken()
     let token = await VerifyToken.create({
         type: "confirm-account",
@@ -120,7 +120,7 @@ export async function Register(
         expiredAt: verificationExpiresAt,
         token: verifyToken,
     })
-    if (!token) throw ApiError.interal("faild to create verifyToken")
+    if (!token) throw ApiError.internal("Failed to create verifyToken")
     // Replace placeholder in html template
     let html = htmlTemplate
         .replace("{{expiresIn}}", auth.token.expired.toString())
@@ -154,7 +154,7 @@ export async function verifyAccount(verifyToken: string) {
     let channel = await createChannel(user._id)
     if (!channel) {
         await User.findByIdAndDelete(user._id)
-        throw ApiError.interal("Faild to verify account, please try again")
+        throw ApiError.internal("Failed to verify account, please try again")
     }
     await VerifyToken.deleteOne({ _id: checkToken._id })
 }
@@ -237,7 +237,7 @@ export async function sendLoginAlert(
 }
 
 // Generate JWT Refresh Token (long-lived - 1 Hour)
-export function createAcessToken(payload: ITokenPayload) {
+export function createAccessToken(payload: ITokenPayload) {
     return jwt.sign(payload, accessTokenConfig.secret, { expiresIn: accessTokenConfig.expiresIn })
 }
 
@@ -246,12 +246,12 @@ export function createRefreshToken(payload: ITokenPayload) {
     return jwt.sign(payload, refreshTokenConfig.secret, { expiresIn: refreshTokenConfig.expiresIn })
 }
 
-export async function sendtwoFactorAuthentication(user: { _id: Types.ObjectId; email: string }) {
+export async function sendTwoFactorAuthentication(user: { _id: Types.ObjectId; email: string }) {
     let token = generateCode()
     let verificationId = generateToken()
     let checkToken = await VerifyToken.findOne({ token })
     if (checkToken) {
-        await sendtwoFactorAuthentication(user) // Recursion
+        await sendTwoFactorAuthentication(user) // Recursion
     }
     // Delete old tokens
     await VerifyToken.deleteMany({
@@ -266,7 +266,7 @@ export async function sendtwoFactorAuthentication(user: { _id: Types.ObjectId; e
         token,
         verificationId,
     })
-    if (!newVerifyToken) throw ApiError.interal("Faild to create verify token , please try again")
+    if (!newVerifyToken) throw ApiError.internal("Failed to create verify token, please try again")
     let html = twoFactorTemplate
         .replace("{{code}}", token)
         .replace("{{expiresIn}}", auth.token.expired.toString())
@@ -286,7 +286,7 @@ async function handleSuccessfulLogin(
         username: user.username,
         email: user.email,
     }
-    let accessToken = createAcessToken(payload)
+    let accessToken = createAccessToken(payload)
     let refreshToken = createRefreshToken(payload)
     await RefreshToken.create({
         token: refreshToken,
@@ -363,7 +363,7 @@ export async function login(email: string, password: string, userAgent: string, 
         throw ApiError.unAuthorized("Invalid password")
     }
     if (user.twoFactorAuthentication) {
-        let verificationId = await sendtwoFactorAuthentication(user)
+        let verificationId = await sendTwoFactorAuthentication(user)
         let isTwoAuth = true
         return { isTwoAuth, verificationId }
     }
@@ -386,7 +386,7 @@ export async function refresh(refreshToken: string) {
             }
         }
         const { iat, exp, ...cleanPayload } = payload as any
-        const accessToken = createAcessToken(cleanPayload as ITokenPayload)
+        const accessToken = createAccessToken(cleanPayload as ITokenPayload)
         return accessToken
     } catch (err) {
         if (err instanceof jwt.TokenExpiredError) {

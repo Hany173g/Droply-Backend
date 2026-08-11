@@ -6,12 +6,12 @@ import {
     updateBannerPhoto,
     handleSubscription,
     toggleNotification,
-} from "./channel.contoller.js"
+} from "./channel.controller.js"
 import { protect } from "../../middlewares/auth.js"
 import validate from "../../middlewares/validate.js"
-import { updateChannelSchema, updateMediaSchema, channelIdSchema } from "./channel.valadtion.js"
+import { updateChannelSchema, updateMediaSchema, channelIdSchema } from "./channel.validation.js"
 import { imageUpload } from "../../config/multer.js"
-import { subscriptionLimiter, notificationToggleLimiter } from "../../middlewares/rateLimter.js"
+import { subscriptionLimiter, notificationToggleLimiter } from "../../middlewares/rateLimiter.js"
 const router = express.Router()
 
 router.get("/countries", protect, getAllCountries)

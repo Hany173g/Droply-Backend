@@ -17,7 +17,7 @@ export interface IChannelLink {
 export interface IChannel {
     links: IChannelLink[]
 
-    emailContant?: string
+    emailContact?: string
 
     location?: {
         country: String
