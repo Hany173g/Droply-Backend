@@ -1,6 +1,7 @@
 import { Worker, Queue } from "bullmq"
 import { redis } from "../../config/redis.js"
 import { createSingleNotification, handleNotificationData } from "./notification.service.js"
+import logger from "../../utils/logger.js"
 
 export const lightNotificationQueue = new Queue("lightNotificationQueue", {
     connection: redis,
@@ -35,9 +36,9 @@ const broadcastWorker = new Worker(
 )
 
 lightWorker.on("failed", (job, err) => {
-    console.error(`Light notification job ${job?.id} failed:`, err.message)
+    logger.error(`Light notification job ${job?.id} failed:`, err.message)
 })
 
 broadcastWorker.on("failed", (job, err) => {
-    console.error(`Broadcast notification job ${job?.id} failed:`, err.message)
+    logger.error(`Broadcast notification job ${job?.id} failed:`, err.message)
 })

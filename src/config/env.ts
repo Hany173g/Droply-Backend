@@ -1,5 +1,6 @@
 import joi from "joi"
 import dotenv from "dotenv"
+import logger from "../utils/logger.js"
 
 dotenv.config()
 
@@ -36,7 +37,7 @@ const envValidation = joi
 let { error, value } = envValidation.validate(process.env)
 
 if (error) {
-    console.error("Invalid environment variables:", error.message)
+    logger.error("Invalid environment variables:", error.message)
     process.exit(1)
 }
 

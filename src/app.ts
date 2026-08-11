@@ -8,7 +8,10 @@ import cookieParser from "cookie-parser"
 import { globalLimiter, authLimiter } from "./middlewares/rateLimiter.js"
 import { globalErrorHandling } from "./middlewares/errorHandling.js"
 import { env } from "./config/env.js"
+import { requestLogger } from "./middlewares/requestLogger.js"
 let app = express()
+
+app.use(requestLogger)
 
 app.use(cors({ origin: env.client.url, credentials: true }))
 

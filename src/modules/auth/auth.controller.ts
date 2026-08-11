@@ -109,6 +109,13 @@ export const twoFactorAuthenticationVerification = asyncHandler(
             req.headers["user-agent"] || "unknown",
             req.ip || "unknown",
         )
-        res.status(200).json({ accessToken, refreshToken })
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/api/v1/auth/refresh",
+        })
+        res.status(200).json({ accessToken })
     },
 )

@@ -10,43 +10,23 @@ export interface VideoUploadResult {
     bytes: number
 }
 
-export async function uploadReelToCloudinary(
-    filePath: string,
-    folder: string,
-): Promise<VideoUploadResult> {
-    const result = await cloudinary.uploader.upload(filePath, {
-        folder,
-        resource_type: "video",
-        type: "authenticated",
-        eager: [
-            { streaming_profile: "hd", format: "m3u8" },
-            { format: "jpg", start_offset: "5", type: "upload" },
-        ],
-        eager_async: true,
-    })
-
-    return {
-        publicId: result.public_id,
-        originalUrl: result.secure_url,
-        duration: result.duration,
-        hash: result.etag,
-        width: result.width,
-        height: result.height,
-        bytes: result.bytes,
-    }
+export interface UploadVideoOptions {
+    folder: string
+    streamingProfile?: "hd" | "full_hd"
+    thumbnailOffset?: string | "auto"
 }
 
 export async function uploadVideoToCloudinary(
     filePath: string,
-    options: { folder: string },
+    options: UploadVideoOptions,
 ): Promise<VideoUploadResult> {
     const result = await cloudinary.uploader.upload(filePath, {
         folder: options.folder,
         resource_type: "video",
         type: "authenticated",
         eager: [
-            { streaming_profile: "full_hd", format: "m3u8" },
-            { format: "jpg", start_offset: "auto", type: "upload" },
+            { streaming_profile: options.streamingProfile ?? "full_hd", format: "m3u8" },
+            { format: "jpg", start_offset: options.thumbnailOffset ?? "auto", type: "upload" },
         ],
         eager_async: true,
     })

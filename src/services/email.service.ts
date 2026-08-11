@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer"
+import logger from "../utils/logger.js"
 
 class EmailService {
     private user: string
@@ -16,9 +17,6 @@ class EmailService {
                 user: this.user,
                 pass: this.pass,
             },
-            tls: {
-                rejectUnauthorized: false,
-            },
         })
     }
 
@@ -31,7 +29,7 @@ class EmailService {
                 html,
             })
         } catch (error) {
-            console.error("Email sending error:", error)
+            logger.error("Email sending error:", error)
             throw error
         }
     }

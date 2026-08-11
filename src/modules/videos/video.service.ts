@@ -4,16 +4,16 @@ import type { IUserVideo, IVideo } from "./video.types.js"
 import User from "../user/models/user.model.js"
 import Channel from "../channel/models/channel.model.js"
 import {
-    uploadReelToCloudinary,
     uploadVideoToCloudinary,
-    type VideoUploadResult,
 } from "../../config/uploadVideoToCloudinary.js"
 import { uploadImageToCloudinary } from "../../config/uploadImageToCloudinary.js"
+import type { VideoUploadResult } from "../../config/uploadVideoToCloudinary.js"
 import { mediaInfoFactory } from "mediainfo.js"
 import fsPromises from "fs/promises"
 import { ApiError } from "../../utils/ApiError.js"
 import mongoose from "mongoose"
 import crypto from "crypto"
+import logger from "../../utils/logger.js"
 import { Job } from "bullmq"
 import fs from "fs"
 import { generateToken } from "../../utils/generateRandomToken.js"
@@ -216,7 +216,7 @@ export async function uploadVideoAndThumbnail(
         if (userVideo.type == "video") {
             result = await uploadVideoToCloudinary(filePath, { folder: "videos" })
         } else {
-            result = await uploadReelToCloudinary(filePath, "reels")
+            result = await uploadVideoToCloudinary(filePath, { folder: "reels", streamingProfile: "hd", thumbnailOffset: "5" })
         }
     } catch (err) {
         if (isLastAttempt) {
@@ -230,7 +230,7 @@ export async function uploadVideoAndThumbnail(
     try {
         video = await createVideo(userId, hashVideo, result)
     } catch (err) {
-        console.error("createVideo error:", err)
+        logger.error("createVideo error:", err)
         if (isLastAttempt) {
             await fsPromises.unlink(filePath).catch(() => {})
             userVideo.upload = "faild"
@@ -251,7 +251,7 @@ export async function uploadVideoAndThumbnail(
                 crop: "fill",
             })
         } catch (err) {
-            console.error("Thumbnail upload failed:", err)
+            logger.error("Thumbnail upload failed:", err)
         }
         await fsPromises.unlink(thumbnailPath).catch(() => {})
     }

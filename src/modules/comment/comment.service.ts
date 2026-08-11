@@ -5,6 +5,7 @@ import mongoose, { Types } from "mongoose"
 import { hasUserLikedMany as hasUserLiked } from "../like/like.service.js"
 import { lightNotificationQueue } from "../notification/notification.queue.js"
 import { ApiFeatures } from "../../utils/ApiFeatures.js"
+import logger from "../../utils/logger.js"
 
 export async function createComment(
     userId: string,
@@ -39,7 +40,7 @@ export async function createComment(
         return comment
     } catch (err) {
         await session.abortTransaction()
-        console.error("createComment error:", err)
+        logger.error("createComment error:", err)
         throw err
     } finally {
         await session.endSession()

@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { env } from "./env.js"
+import logger from "../utils/logger.js"
 
 const MAX_RETRIES = 5
 const RETRY_INTERVAL_MS = 5000 // 5 seconds
@@ -12,12 +13,12 @@ export const connectDB = async () => {
         // retries = 0; // reset on success
     } catch (error) {
         retries++
-        console.error(
-            ` MongoDB connection failed (attempt ${retries}/${MAX_RETRIES}): ${error instanceof Error ? error.message : String(error)}`,
+        logger.error(
+            `MongoDB connection failed (attempt ${retries}/${MAX_RETRIES}): ${error instanceof Error ? error.message : String(error)}`,
         )
 
         if (retries >= MAX_RETRIES) {
-            console.error(" Max retries reached. Shutting down.")
+            logger.error("Max retries reached. Shutting down.")
             process.exit(1)
         }
 
@@ -27,7 +28,7 @@ export const connectDB = async () => {
 
 // Lost connection after initial connect
 mongoose.connection.on("disconnected", () => {
-    console.warn(" MongoDB disconnected. Attempting to reconnect...")
+    logger.warn("MongoDB disconnected. Attempting to reconnect...")
     setTimeout(connectDB, RETRY_INTERVAL_MS)
 })
 

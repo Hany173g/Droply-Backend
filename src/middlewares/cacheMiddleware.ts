@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express"
 import { redisCache } from "../config/redis.js"
+import logger from "../utils/logger.js"
 
 export function cacheMiddleware(ttl: number) {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +13,7 @@ export function cacheMiddleware(ttl: number) {
                 return res.status(status).json(body)
             }
         } catch (err) {
-            console.error("Cache read error:", err)
+            logger.error("Cache read error:", err)
         }
 
         const originalJson = res.json.bind(res)
@@ -21,7 +22,7 @@ export function cacheMiddleware(ttl: number) {
             if (status >= 200 && status < 300) {
                 redisCache
                     .setex(cacheKey, ttl, JSON.stringify({ status, body }))
-                    .catch((err) => console.error("Cache write error:", err))
+                    .catch((err) => logger.error("Cache write error:", err))
             }
             return originalJson(body)
         }

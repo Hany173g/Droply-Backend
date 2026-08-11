@@ -201,6 +201,7 @@ export async function updatePassword(verifyToken: string, password: string) {
     })
     checkExpiredToken(checkToken)
     if (!checkToken) return // Skip typescript errors
+    checkPassword(password)
     password = await hashPassword(password)
     let user = await User.findOneAndUpdate({ _id: checkToken.userId }, { $set: { password } })
     await VerifyToken.deleteOne({ _id: checkToken._id })
