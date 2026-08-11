@@ -438,7 +438,10 @@ export async function getUserVideo(videoId: string, userId: string) {
 }
 
 export async function refreshSignedUrl(videoId: string, userId: string) {
-    let userVideo = await UserVideo.findOne({ _id: videoId }).populate({
+    const userVideo = await UserVideo.findOne({ 
+            _id: videoId,
+            $or: [{ status: "public" }, { userId }]
+        }).populate({
         path: "videoId",
         select: "+url",
     })
